@@ -67,6 +67,6 @@ export const getUserOrder = async (
     console.error(error);
     return res
       .status(500)
-      .json({ error: 'Internsl Server error'});
+      .json({ error: 'Internal Server error'});
   }
 };
