@@ -44,7 +44,7 @@ const login = async (req: express.Request, res: express.Response) => {
 
     const foundUser = await User.findOne({ email });
     if (!foundUser) {
-      return res.status(400).json({ error: 'Email or password not correct' });
+      return res.status(400).json({ error: 'Inavlid email or password' });
     }
 
     const verifyPassword = await bcrypt.compare(password, foundUser.password);
@@ -54,7 +54,7 @@ const login = async (req: express.Request, res: express.Response) => {
 
     const { _id, role } = foundUser;
     const payload = { id: _id.toString(), role };
-    const token = await jwt.sign(payload, SECRET, { expiresIn: '1hr' });
+    const token = jwt.sign(payload, SECRET, { expiresIn: '1hr' });
 
     res.cookie('token', token, {
       httpOnly: true,
@@ -72,22 +72,21 @@ const login = async (req: express.Request, res: express.Response) => {
 };
 
 const logOut = (req: express.Request, res: express.Response) => {
-  const token = req.cookies.token
+  const token = req.cookies.token;
   try {
     if (!token)
       return res
         .status(401)
         .json({ message: 'Token not found. Please log in' });
-    jwt.verify(String(token), SECRET, (err, decodedUser) => {
-      if (err) {
-        return res.status(400).json({ message: 'Authentication failed' });
-      }
-      res.clearCookie('token');
-      req.cookies['token'] = '';
-      return res.status(200).json({ message: 'Succesffuly Logged out' });
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
     });
+
+    return res.status(204).end();
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
 
