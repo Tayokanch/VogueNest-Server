@@ -56,11 +56,12 @@ const login = async (req: express.Request, res: express.Response) => {
     const payload = { id: _id.toString(), role };
     const token = jwt.sign(payload, SECRET, { expiresIn: '1hr' });
 
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 3600000,
-    });
+ res.cookie('token', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production', 
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', 
+  maxAge: 3600000,
+});
 
     return res
       .status(200)
@@ -73,6 +74,7 @@ const login = async (req: express.Request, res: express.Response) => {
 
 const logOut = (req: express.Request, res: express.Response) => {
   const token = req.cookies.token;
+  token ? console.log("Here's Token :", token) : console.log("I can't find Token")
   try {
     if (!token)
       return res

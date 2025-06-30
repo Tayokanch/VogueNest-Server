@@ -15,13 +15,11 @@ dotenv.config();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: 'https://voguenestt.netlify.app',
-    //origin: 'http://localhost:5173',
-    credentials: true,
-  })
-);
+
+app.use(cors({
+  origin: ['https://voguenestt.netlify.app', 'http://localhost:5173'],
+  credentials: true,
+}));
 
 app.use(compression());
 app.use(cookieParser());
