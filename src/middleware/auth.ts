@@ -11,21 +11,27 @@ if (!SECRET) {
   throw new Error('Secret not found');
 }
 
-export const authenticateUser = (
+export const middleware = (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies.token;
+  const authHeader = req.headers.authorization;
+  
   try {
-    if (!token) {
-      return res.status(404).json({
-        message: 'Authentication failed. Please log in',
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({
+        message: 'Access token required. Please log in',
       });
     }
-    jwt.verify(String(token), SECRET, (err, decodedUser) => {
+    
+    const accessToken = authHeader.split(' ')[1];
+    
+    jwt.verify(accessToken, SECRET, (err, decodedUser) => {
       if (err) {
-        return res.status(400).json({ message: 'Token expired or invalid. Please log in' });
+        return res.status(401).json({ 
+          message: 'Access token expired or invalid. Please refresh token' 
+        });
       }
       req.decodedUser = decodedUser as DecodedUserI;
       next(); 

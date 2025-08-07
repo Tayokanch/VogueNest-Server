@@ -54,18 +54,21 @@ const login = async (req: express.Request, res: express.Response) => {
 
     const { _id, role } = foundUser;
     const payload = { id: _id.toString(), role };
-    const token = jwt.sign(payload, SECRET, { expiresIn: '1hr' });
+    const token = jwt.sign(payload, SECRET, { expiresIn: '15m' });
+    const refreshToken = jwt.sign(payload, SECRET, { expiresIn: '7d' });
 
- res.cookie('token', token, {
+ res.cookie('refreshToken', refreshToken, {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production', 
   sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', 
-  maxAge: 3600000,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  path: '/api/refreshToken',
 });
+
 
     return res
       .status(200)
-      .json({ login: true, role: role, id: _id.toString() });
+      .json({ login: true, role: role, id: _id.toString(), accessToken: token, });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Internal Server Error' });

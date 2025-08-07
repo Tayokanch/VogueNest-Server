@@ -1,9 +1,9 @@
 import express from 'express';
 import { makePayment } from '../controllers/stripeController';
-import { authenticateUser } from '../middleware/auth';
+import { middleware } from '../middleware/auth';
 
 const router = express.Router();
 
-router.post('/create-checkout-session', authenticateUser, makePayment);
+router.post('/create-checkout-session', middleware, makePayment);
 
 export default router;
