@@ -11,24 +11,12 @@ import userRouter from './routers/userRouter';
 import refreshTokenRouter from './routers/refreshTokenRouter';
 import orderRouter from './routers/orderRouter';
 import stripeRouter from './routers/stripe';
+import { refreshTokenLimiter } from './controllers/refreshTokenLimiter';
 
 dotenv.config();
 
 const app = express();
 
-// Rate limiter for refresh token endpoint 
-const refreshTokenLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // limit each IP to 5 requests per windowMs
-  handler: (req, res) => {
-    res.status(429).json({
-      error: 'Refresh token limit exceeded. Please login again.',
-      code: 'RATE_LIMIT_EXCEEDED'
-    });
-  },
-  standardHeaders: false, // Don't show retry headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-});
 
 app.use(cors({
   origin: ['https://voguenestt.netlify.app', 'http://localhost:5173'],
