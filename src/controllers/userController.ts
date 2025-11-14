@@ -52,7 +52,7 @@ const login = async (req: express.Request, res: express.Response) => {
       return res.status(400).json({ error: 'Email or password not correct' });
     }
 
-    const { _id, role } = foundUser;
+    const { _id, role, name } = foundUser;
     const payload = { id: _id.toString(), role };
     const token = jwt.sign(payload, SECRET, { expiresIn: '15m' });
     const refreshToken = jwt.sign(payload, SECRET, { expiresIn: '7d' });
@@ -68,7 +68,7 @@ const login = async (req: express.Request, res: express.Response) => {
 
     return res
       .status(200)
-      .json({ login: true, role: role, id: _id.toString(), accessToken: token, });
+      .json({ login: true, role: role, id: _id.toString(), accessToken: token, username:name });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: 'Internal Server Error' });
