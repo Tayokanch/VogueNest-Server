@@ -29,7 +29,7 @@ UserSchema.virtual("id").get(function () {
 // ⭐ Configure clean JSON output
 UserSchema.set("toJSON", {
   virtuals: true,
-  transform: function (doc, ret : any) {
+  transform: function (doc, ret: any) {
     delete ret._id; // hide Mongo's _id
   },
 });
