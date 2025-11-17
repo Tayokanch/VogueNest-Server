@@ -1,9 +1,10 @@
 {
-  "scripts": {
-    "start": "nodemon src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js"
-  },
+"scripts": {
+  "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+  "build": "tsc",
+  "start": "node dist/server.js"
+},
+
   "dependencies": {
     "bcrypt": "^5.1.1",
     "compression": "^1.7.4",
