@@ -21,12 +21,12 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-// ⭐ Create a clean string `id`
+
 UserSchema.virtual("id").get(function () {
   return this._id.toHexString();
 });
 
-// ⭐ Configure clean JSON output
+
 UserSchema.set("toJSON", {
   virtuals: true,
   transform: function (doc, ret: any) {
