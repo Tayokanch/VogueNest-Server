@@ -1,28 +1,37 @@
-import mongoose, { Schema } from 'mongoose';
-import { UserI } from '../services.ts/interface';
+import mongoose, { Schema } from "mongoose";
+import { UserI } from "../services.ts/interface";
 
-const UserSchema: Schema<UserI> = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true, select: true },
-    role: { 
-      type: String,
-      enum: ['user', 'vogueadmin'],
-      default: 'user',
 
-    }
+    email: { type: String, required: true, unique: true },
+
+    password: { type: String, required: true, select: true },
+
+    role: {
+      type: String,
+      enum: ["user", "vogueadmin"],
+      default: "user",
+    },
   },
   {
     timestamps: true,
-    toJSON: {
-      transform: (doc, ret) => {
-        ret._id = ret._id.toString();
-        delete ret.__v;
-      },
-    },
+    versionKey: false,
   }
 );
 
+// ⭐ Create a clean string `id`
+UserSchema.virtual("id").get(function () {
+  return this._id.toHexString();
+});
 
-export const User = mongoose.model<UserI>("User", UserSchema)
+// ⭐ Configure clean JSON output
+UserSchema.set("toJSON", {
+  virtuals: true,
+  transform: function (doc, ret : any) {
+    delete ret._id; // hide Mongo's _id
+  },
+});
+
+export const User = mongoose.model<UserI>("User", UserSchema);
