@@ -29,12 +29,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-app.use('/api/voguenest', userRouter);
-app.use('/api/voguenest', orderRouter);
+app.use('/api', userRouter);
+app.use('/api', orderRouter);
 app.use('/api/payment', stripeRouter);
-app.use('/api/voguenest', refreshTokenLimiter, refreshTokenRouter);
+app.use('/api', refreshTokenLimiter, refreshTokenRouter);
 
-const PORT = process.env.PORT || 8050;  
+const PORT = process.env.PORT || 3100;  
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}/`);
 });
