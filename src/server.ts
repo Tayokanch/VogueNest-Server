@@ -19,7 +19,7 @@ const app = express();
 
 
 app.use(cors({
-  origin: ['https://voguenestt.netlify.app', 'http://localhost:5173'],
+  origin: ['https://vogueshopping.tayolabs.dev/', 'http://localhost:5173'],
   credentials: true,
 }));
 
