@@ -34,12 +34,12 @@ pipeline {
 stage('Health Check') {
     steps {
         sh 'curl -I http://localhost:3100/api/users > response.txt'
-        sh '''
+        sh """
             if ! grep -q "HTTP/1.1 200" users.txt; then
                 curl http://localhost:3100/api/users > users.txt
                 exit 1
             fi
-        '''
+        """
         archiveArtifacts artifacts: 'users.txt', fingerprint: true
     }
 }
