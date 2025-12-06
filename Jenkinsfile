@@ -8,7 +8,7 @@ pipeline {
             steps{
 
             sh '''
-                echo "checking out to development branch....
+                echo "checking out to development branch...."
                 git checkout ${params.development}
             '''
             }
