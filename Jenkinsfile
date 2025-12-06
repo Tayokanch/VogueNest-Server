@@ -9,7 +9,7 @@ pipeline {
 
             sh '''
                 echo "checking out to development branch...."
-                git checkout ${params.development}
+                git checkout ${params.BRANCH}
             '''
             }
         }
