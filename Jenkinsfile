@@ -4,7 +4,13 @@ pipeline {
         nodejs 'NJ20.19.0'
     }
     stages {
+        stage('Checkout Branch'){
 
+            sh '''
+                echo "checking out to development branch....
+                git checkout ${params.development}
+            '''
+        }
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
@@ -25,10 +31,10 @@ pipeline {
 
 stage('Health Check') {
     steps {
-        sh 'curl -I http://localhost:3100/api/users > users.txt'
+        sh 'curl -I http://localhost:3100/api/users > response.txt'
         sh '''
             if ! grep -q "HTTP/1.1 200" users.txt; then
-                echo "API health check failed"
+                curl http://localhost:3100/api/users > users.txt
                 exit 1
             fi
         '''
