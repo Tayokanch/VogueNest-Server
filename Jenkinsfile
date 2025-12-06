@@ -5,11 +5,13 @@ pipeline {
     }
     stages {
         stage('Checkout Branch'){
+            steps{
 
             sh '''
                 echo "checking out to development branch....
                 git checkout ${params.development}
             '''
+            }
         }
         stage('Install Dependencies') {
             steps {
