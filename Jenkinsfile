@@ -40,7 +40,8 @@ pipeline {
                         exit 1
                     fi
                 """
-                archiveArtifacts artifacts: 'response.txt', fingerprint: true
+                sh 'curl http://localhost:3100/api/users > users.txt'
+                archiveArtifacts artifacts: 'response.txt', 'users.txt', fingerprint: true
             }
         }
     }
